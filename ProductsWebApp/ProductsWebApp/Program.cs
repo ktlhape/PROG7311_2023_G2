@@ -28,7 +28,7 @@ namespace ProductsWebApp
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Supplier}/{action=Login}/{id?}");
+                pattern: "{controller=Supplier}/{action=AllSuppliers}/{id?}");
 
             app.Run();
         }

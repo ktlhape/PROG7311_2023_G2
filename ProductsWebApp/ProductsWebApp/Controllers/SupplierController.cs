@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProductsWebApp.Models;
+using System;
 
 namespace ProductsWebApp.Controllers
 {
@@ -48,9 +49,6 @@ namespace ProductsWebApp.Controllers
             {
                 return View("Login");
             }
-
-
-        
         }
 
         // GET: SupplierController/Details/5
@@ -64,26 +62,52 @@ namespace ProductsWebApp.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public ActionResult CreateNew()
+        {
+            string supId = Request.Form["txtID"].ToString();
+            string name = Request.Form["txtName"].ToString();
+            string phone = Request.Form["txtPhone"].ToString();
+            string usernamne = Request.Form["txtUsername"].ToString();
+            string pass = Request.Form["txtPass"].ToString();
+
+            Supplier ss = new Supplier(supId, name, phone);
+            ss.Username = usernamne;
+            ss.Password = pass;
+            supplierList.Add(ss);
+
+            return View("AllSuppliers",supplierList);
+        }
 
         // POST: SupplierController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormCollection collection)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            string supID = collection["txtID"].ToString();
+            string name = collection["txtName"].ToString();
+            string phone = collection["txtPhone"].ToString();
+            string usernamne = collection["txtUsername"].ToString();
+            string pass = collection["txtPass"].ToString();
+
+            Supplier ss = new Supplier(supID, name, phone);
+            ss.Username = usernamne;
+            ss.Password = pass;
+            supplierList.Add(ss);
+
+            return View("AllSuppliers", supplierList);
+
         }
 
         // GET: SupplierController/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(string? id)
         {
-            return View();
+            /*we need to find the supplier with the matching id from 
+             * the list and send the found object to the view*/
+           
+            var st = supplierList.Find(s => s.SupplierID.Equals(id));
+
+            return View(st);
         }
 
         // POST: SupplierController/Edit/5
